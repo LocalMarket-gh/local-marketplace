@@ -9,36 +9,44 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --border: #e2e8f0;
-            --whatsapp: #25d366;
+            --whatsapp: #10b981;
+            --whatsapp-hover: #059669;
             --danger: #ef4444;
+            --radius: 16px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding-bottom: 3rem;
+            background-color: #f8fafc;
+            color: var(--text-main);
+            padding-bottom: 4rem;
         }
 
+        /* Modern Glass Header */
         header {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -52,35 +60,70 @@
             align-items: center;
         }
 
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
         h1 {
             font-size: 1.25rem;
-            color: var(--primary);
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .lang-switcher {
             display: flex;
-            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
         }
 
         .lang-btn {
             background: none;
-            border: 1px solid var(--border);
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
+            border: none;
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
         }
 
         .lang-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
+        /* Controls & Search */
         .controls-bar {
             max-width: 1200px;
             margin: 1.5rem auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
@@ -88,116 +131,227 @@
 
         .search-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 260px;
+            position: relative;
         }
 
         .search-box input {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem 0.85rem 2.75rem;
             border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            font-size: 1rem;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
             outline: none;
-            background: var(--card-bg);
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s;
         }
 
-        .post-btn {
-            background: var(--primary);
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
+            padding: 0.85rem 1.25rem;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            transition: transform 0.1s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 0.85rem 1.25rem;
+            border-radius: var(--radius);
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: background 0.2s;
         }
 
-        .post-btn:hover {
-            background: var(--primary-dark);
+        .btn-secondary:hover {
+            background: #f8fafc;
         }
 
+        /* Categories Chips */
         .categories {
             max-width: 1200px;
             margin: 0 auto 1.5rem auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
             display: flex;
             gap: 0.5rem;
             overflow-x: auto;
             padding-bottom: 0.5rem;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
         }
 
         .cat-chip {
-            background: var(--card-bg);
+            background: white;
             border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 30px;
             cursor: pointer;
             white-space: nowrap;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--text-muted);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            transition: all 0.2s;
         }
 
         .cat-chip.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
         }
 
-        .product-grid {
+        /* View Containers */
+        .view-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
+        }
+
+        /* Store Banner Header (When viewing a specific store) */
+        .store-header-banner {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .store-header-info h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .store-header-info p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* Product Grid */
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 1.5rem;
         }
 
         .product-card {
-            background: var(--card-bg);
+            background: white;
             border: 1px solid var(--border);
-            border-radius: 0.75rem;
+            border-radius: var(--radius);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -4px rgba(0,0,0,0.08);
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #f1f5f9;
         }
 
         .product-img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
-            background: #e2e8f0;
+        }
+
+        .product-cat-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            text-transform: uppercase;
         }
 
         .product-body {
-            padding: 1rem;
+            padding: 1.25rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             flex: 1;
         }
 
-        .product-cat {
-            font-size: 0.75rem;
+        .store-tag {
+            font-size: 0.8rem;
             color: var(--primary);
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .store-tag:hover {
+            text-decoration: underline;
         }
 
         .product-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
+            color: var(--text-main);
         }
 
         .product-price {
-            font-size: 1.125rem;
+            font-size: 1.2rem;
             font-weight: 800;
             color: #059669;
         }
 
         .product-loc {
-            font-size: 0.875rem;
-            color: var(--text-light);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
         .card-actions {
@@ -212,25 +366,56 @@
             background: var(--whatsapp);
             color: white;
             text-align: center;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
+            padding: 0.65rem;
+            border-radius: 12px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.875rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .wa-btn:hover {
+            background: var(--whatsapp-hover);
         }
 
         .delete-card-btn {
-            background: #fee2e2;
+            background: #fef2f2;
             color: var(--danger);
             border: none;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.875rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: background 0.2s;
         }
 
-        /* Modal */
+        .delete-card-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+            background: white;
+            border-radius: var(--radius);
+            border: 2px dashed var(--border);
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -238,7 +423,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -250,59 +436,74 @@
         }
 
         .modal-content {
-            background: var(--card-bg);
+            background: white;
             width: 100%;
             max-width: 500px;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             max-height: 90vh;
             overflow-y: auto;
+            animation: modalPop 0.25s ease-out;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
         }
 
         .close-btn {
-            background: none;
+            background: #f1f5f9;
             border: none;
-            font-size: 1.5rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.25rem;
             cursor: pointer;
-            color: var(--text-light);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .form-group label {
             display: block;
             font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.35rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
         }
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.85rem 1rem;
             border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
             outline: none;
+            background: #f8fafc;
+            transition: border-color 0.2s;
         }
 
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-            background: var(--card-bg);
-            border-radius: 0.75rem;
-            border: 1px dashed var(--border);
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            background: white;
         }
     </style>
 </head>
@@ -310,11 +511,16 @@
 
     <header>
         <div class="header-container">
-            <h1 id="brandTitle">🛒 سوق لوكال | Souk Local</h1>
-            <div class="lang-switcher">
-                <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
-                <button class="lang-btn" onclick="setLang('fr')">FR</button>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            <div class="brand" onclick="clearStoreFilter()">
+                <div class="brand-icon">🛒</div>
+                <h1 id="brandTitle">سوق لوكال | Souk Local</h1>
+            </div>
+            <div class="header-actions">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" onclick="setLang('ar')">AR</button>
+                    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+                    <button class="lang-btn" onclick="setLang('en')">EN</button>
+                </div>
             </div>
         </div>
     </header>
@@ -323,18 +529,24 @@
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="ابحث عن منتج، متجر، أو حي..." oninput="renderProducts()">
         </div>
-        <button class="post-btn" id="openModalBtn" onclick="toggleModal(true)">+ نشر منتج جديد</button>
+        <div class="action-btns">
+            <button class="btn-secondary" id="openStoreModalBtn" onclick="toggleStoreModal(true)">🏪 متجري</button>
+            <button class="btn-primary" id="openModalBtn" onclick="toggleModal(true)">+ نشر منتج</button>
+        </div>
     </div>
 
     <div class="categories" id="categoryContainer">
         <!-- Rendered via JS -->
     </div>
 
-    <main class="product-grid" id="productGrid">
-        <!-- Rendered via JS -->
-    </main>
+    <div class="view-container" id="mainViewContainer">
+        <!-- Dynamic content or Store banner -->
+        <main class="product-grid" id="productGrid">
+            <!-- Rendered via JS -->
+        </main>
+    </div>
 
-    <!-- Post Modal -->
+    <!-- Post Product Modal -->
     <div class="modal" id="postModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -343,12 +555,16 @@
             </div>
             <form id="productForm" onsubmit="handlePostProduct(event)">
                 <div class="form-group">
+                    <label id="lblStoreName">اسم متجرك (مثال: متجر الهواتف الذكية)</label>
+                    <input type="text" id="prodStoreName" required placeholder="اسم المحجر أو البائع">
+                </div>
+                <div class="form-group">
                     <label id="lblTitle">اسم المنتج</label>
                     <input type="text" id="prodTitle" required placeholder="مثال: هاتف ذكي، حذاء رياضي...">
                 </div>
                 <div class="form-group">
-                    <label id="lblPrice">السعر (أوقية قديمة/جديدة)</label>
-                    <input type="text" id="prodPrice" required placeholder="مثال: 5000 MRU أو 500 أوقية">
+                    <label id="lblPrice">السعر (أوقية / MRU)</label>
+                    <input type="text" id="prodPrice" required placeholder="مثال: 5000 MRU">
                 </div>
                 <div class="form-group">
                     <label id="lblCat">التصنيف</label>
@@ -361,23 +577,38 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label id="lblLoc">المنطقة / الحي (مثال: تفرغ زينه، الكصر...)</label>
+                    <label id="lblLoc">المنطقة / الحي</label>
                     <input type="text" id="prodLocation" required placeholder="تفرغ زينه، نواكشوط">
                 </div>
                 <div class="form-group">
                     <label id="lblPhone">رقم الهاتف (واتساب - يبدأ ب 2 أو 3 أو 4)</label>
-                    <input type="text" id="prodPhone" required placeholder="مثال: 22123456">
+                    <input type="text" id="prodPhone" required placeholder="22123456">
                 </div>
                 <div class="form-group">
-                    <label id="lblPin">رمز الحذف السري (4 أرقام لحذف منتجك لاحقاً)</label>
+                    <label id="lblPin">رمز الحذف السري (4 أرقام)</label>
                     <input type="password" id="prodPin" maxlength="4" required placeholder="1234">
                 </div>
                 <div class="form-group">
-                    <label id="lblImage">صورة المنتج (من هاتفك)</label>
+                    <label id="lblImage">صورة المنتج</label>
                     <input type="file" id="prodImage" accept="image/*" required onchange="handleImageUpload(event)">
                 </div>
-                <button type="submit" class="post-btn" style="width: 100%;" id="lblSubmit">نشر المنتج الآن</button>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;" id="lblSubmit">نشر المنتج الآن</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Store Profile Setup Modal -->
+    <div class="modal" id="storeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="storeModalTitle">إنشاء أو زيارة صفحة متجرك</h3>
+                <button class="close-btn" onclick="toggleStoreModal(false)">&times;</button>
+            </div>
+            <div class="form-group">
+                <label id="lblEnterStore">أدخل اسم متجرك لعرض جميع منتجاتك:</label>
+                <input type="text" id="storeInputName" placeholder="مثال: متجر نواكشوط الإلكتروني">
+            </div>
+            <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="viewMyStore()" id="lblViewStore">عرض صفحة المتجر</button>
         </div>
     </div>
 
@@ -396,21 +627,26 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Translations
+        // Translations dictionary
         const t = {
             ar: {
                 brand: "🛒 سوق لوكال | Souk Local",
                 search: "ابحث عن منتج، متجر، أو حي...",
-                postBtn: "+ نشر منتج جديد",
+                postBtn: "نشر منتج",
+                myStoreBtn: "متجري",
                 modalTitle: "نشر منتج جديد",
+                storeModalTitle: "إدارة أو زيارة صفحة المتجر",
+                lblStoreName: "اسم المتجر أو البائع",
                 lblTitle: "اسم المنتج",
                 lblPrice: "السعر",
                 lblCat: "التصنيف",
                 lblLoc: "المنطقة / الحي",
                 lblPhone: "رقم الهاتف (يبدأ ب 2 أو 3 أو 4)",
                 lblPin: "رمز الحذف السري (4 أرقام)",
-                lblImage: "صورة المنتج (إلزامي)",
+                lblImage: "صورة المنتج",
                 lblSubmit: "نشر المنتج الآن",
+                lblEnterStore: "أدخل اسم متجرك لعرض صفحتك الخاصة:",
+                lblViewStore: "عرض صفحة المتجر",
                 all: "الكل",
                 waBtn: "اطلب عبر واتساب",
                 empty: "لا توجد منتجات منشورة حتى الآن. كن أول بائع ينشر منتجاً!",
@@ -422,39 +658,49 @@
             fr: {
                 brand: "🛒 Souk Local",
                 search: "Rechercher un produit, boutique...",
-                postBtn: "+ Publier un produit",
+                postBtn: "Publier",
+                myStoreBtn: "Ma Boutique",
                 modalTitle: "Publier un article",
+                storeModalTitle: "Visiter votre boutique",
+                lblStoreName: "Nom de la boutique",
                 lblTitle: "Nom du produit",
                 lblPrice: "Prix",
                 lblCat: "Catégorie",
                 lblLoc: "Quartier / Ville",
-                lblPhone: "Téléphone (commence par 2, 3 ou 4)",
+                lblPhone: "Téléphone (2, 3 ou 4)",
                 lblPin: "Code PIN (4 chiffres)",
-                lblImage: "Image du produit (obligatoire)",
+                lblImage: "Image du produit",
                 lblSubmit: "Publier maintenant",
+                lblEnterStore: "Entrez le nom de votre boutique :",
+                lblViewStore: "Afficher la boutique",
                 all: "Tous",
-                waBtn: "Commander via WhatsApp",
+                waBtn: "WhatsApp",
                 empty: "Aucun produit publié. Soyez le premier !",
                 deleteBtn: "Supprimer",
-                phoneError: "Numéro invalide ! Il doit commencer par 2, 3 ou 4 et comporter 8 chiffres.",
-                pinPrompt: "Entrez le code PIN à 4 chiffres pour supprimer :",
+                phoneError: "Numéro invalide ! 8 chiffres commençant par 2, 3 ou 4.",
+                pinPrompt: "Entrez le code PIN :",
                 wrongPin: "Code PIN incorrect !"
             },
             en: {
                 brand: "🛒 Souk Local",
                 search: "Search products, shops, neighborhoods...",
-                postBtn: "+ Post Product",
+                postBtn: "Post Item",
+                myStoreBtn: "My Store",
                 modalTitle: "Post New Product",
+                storeModalTitle: "Visit Your Store Page",
+                lblStoreName: "Store / Seller Name",
                 lblTitle: "Product Name",
                 lblPrice: "Price",
                 lblCat: "Category",
                 lblLoc: "Neighborhood / Location",
                 lblPhone: "Phone Number (starts with 2, 3, or 4)",
                 lblPin: "4-Digit Delete PIN",
-                lblImage: "Product Image (Required)",
+                lblImage: "Product Image",
                 lblSubmit: "Publish Now",
+                lblEnterStore: "Enter your store name to view your profile:",
+                lblViewStore: "View Store Page",
                 all: "All",
-                waBtn: "Order via WhatsApp",
+                waBtn: "WhatsApp",
                 empty: "No products posted yet. Be the first merchant!",
                 deleteBtn: "Delete",
                 phoneError: "Invalid Mauritanian number! Must be 8 digits starting with 2, 3, or 4.",
@@ -471,10 +717,11 @@
 
         let currentLang = 'ar';
         let activeCategory = 'all';
+        let activeStoreFilter = null; // Filter by specific store page
         let uploadedImageBase64 = '';
         let products = [];
 
-        // 🌟 Real-time Firestore Sync (Loads and updates automatically)
+        // Real-time Firestore Sync
         db.collection('products').onSnapshot((snapshot) => {
             products = [];
             snapshot.forEach((doc) => {
@@ -489,14 +736,15 @@
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
+            event.target.classList.add('active');
 
             document.getElementById('brandTitle').innerText = t[lang].brand;
             document.getElementById('searchInput').placeholder = t[lang].search;
-            document.getElementById('openModalBtn').innerText = t[lang].postBtn;
+            document.getElementById('openModalBtn').innerHTML = `+ ${t[lang].postBtn}`;
+            document.getElementById('openStoreModalBtn').innerText = `🏪 ${t[lang].myStoreBtn}`;
             document.getElementById('modalTitle').innerText = t[lang].modalTitle;
+            document.getElementById('storeModalTitle').innerText = t[lang].storeModalTitle;
+            document.getElementById('lblStoreName').innerText = t[lang].lblStoreName;
             document.getElementById('lblTitle').innerText = t[lang].lblTitle;
             document.getElementById('lblPrice').innerText = t[lang].lblPrice;
             document.getElementById('lblCat').innerText = t[lang].lblCat;
@@ -505,6 +753,8 @@
             document.getElementById('lblPin').innerText = t[lang].lblPin;
             document.getElementById('lblImage').innerText = t[lang].lblImage;
             document.getElementById('lblSubmit').innerText = t[lang].lblSubmit;
+            document.getElementById('lblEnterStore').innerText = t[lang].lblEnterStore;
+            document.getElementById('lblViewStore').innerText = t[lang].lblViewStore;
 
             renderCategories();
             renderProducts();
@@ -513,18 +763,32 @@
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
             const currentCats = cats[currentLang];
-            let html = `<div class="cat-chip ${activeCategory === 'all' ? 'active' : ''}" onclick="filterCat('all')">${currentCats.all}</div>`;
+            let html = `<div class="cat-chip ${activeCategory === 'all' && !activeStoreFilter ? 'active' : ''}" onclick="clearStoreFilter()">${currentCats.all}</div>`;
             
             for (let key in currentCats) {
                 if (key !== 'all') {
-                    html += `<div class="cat-chip ${activeCategory === key ? 'active' : ''}" onclick="filterCat('${key}')">${currentCats[key]}</div>`;
+                    html += `<div class="cat-chip ${activeCategory === key && !activeStoreFilter ? 'active' : ''}" onclick="filterCat('${key}')">${currentCats[key]}</div>`;
                 }
             }
             container.innerHTML = html;
         }
 
         function filterCat(cat) {
+            activeStoreFilter = null;
             activeCategory = cat;
+            renderCategories();
+            renderProducts();
+        }
+
+        function clearStoreFilter() {
+            activeStoreFilter = null;
+            activeCategory = 'all';
+            renderCategories();
+            renderProducts();
+        }
+
+        function filterByStore(storeName) {
+            activeStoreFilter = storeName;
             renderCategories();
             renderProducts();
         }
@@ -535,6 +799,20 @@
                 document.getElementById('productForm').reset();
                 uploadedImageBase64 = '';
             }
+        }
+
+        function toggleStoreModal(open) {
+            document.getElementById('storeModal').classList.toggle('open', open);
+        }
+
+        function viewMyStore() {
+            const name = document.getElementById('storeInputName').value.trim();
+            if (!name) {
+                alert("Please enter a store name!");
+                return;
+            }
+            toggleStoreModal(false);
+            filterByStore(name);
         }
 
         function handleImageUpload(event) {
@@ -548,14 +826,14 @@
             }
         }
 
-        // 🌟 Post product directly to Firestore Cloud Database
         function handlePostProduct(e) {
             e.preventDefault();
 
-            const title = document.getElementById('prodTitle').value;
-            const price = document.getElementById('prodPrice').value;
+            const storeName = document.getElementById('prodStoreName').value.trim();
+            const title = document.getElementById('prodTitle').value.trim();
+            const price = document.getElementById('prodPrice').value.trim();
             const category = document.getElementById('prodCategory').value;
-            const location = document.getElementById('prodLocation').value;
+            const location = document.getElementById('prodLocation').value.trim();
             const phone = document.getElementById('prodPhone').value.trim();
             const pin = document.getElementById('prodPin').value;
 
@@ -571,6 +849,7 @@
             }
 
             const newProduct = {
+                storeName,
                 title,
                 price,
                 category,
@@ -591,7 +870,6 @@
                 });
         }
 
-        // 🌟 Delete product straight from Firestore Cloud Database
         function deleteProduct(id) {
             const product = products.find(p => p.id === id);
             if (!product) return;
@@ -611,40 +889,67 @@
         }
 
         function renderProducts() {
-            const grid = document.getElementById('productGrid');
+            const container = document.getElementById('mainViewContainer');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
 
-            const filtered = products.filter(p => {
-                const matchesCat = (activeCategory === 'all' || p.category === activeCategory);
-                const matchesSearch = (p.title && p.title.toLowerCase().includes(searchVal)) || (p.location && p.location.toLowerCase().includes(searchVal));
-                return matchesCat && matchesSearch;
+            let filtered = products.filter(p => {
+                const matchesStore = !activeStoreFilter || (p.storeName && p.storeName.toLowerCase() === activeStoreFilter.toLowerCase());
+                const matchesCat = activeStoreFilter || (activeCategory === 'all' || p.category === activeCategory);
+                const matchesSearch = (p.title && p.title.toLowerCase().includes(searchVal)) || 
+                                      (p.location && p.location.toLowerCase().includes(searchVal)) ||
+                                      (p.storeName && p.storeName.toLowerCase().includes(searchVal));
+                return matchesStore && matchesCat && matchesSearch;
             });
 
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="empty-state">${t[currentLang].empty}</div>`;
-                return;
-            }
+            let htmlContent = '';
 
-            let html = '';
-            filtered.forEach(p => {
-                const waText = encodeURIComponent(`Hello, I want to buy your product: ${p.title} (${p.price}) listed in Souk Local.`);
-                html += `
-                    <div class="product-card">
-                        <img src="${p.image}" alt="${p.title}" class="product-img">
-                        <div class="product-body">
-                            <span class="product-cat">${cats[currentLang][p.category] || p.category}</span>
-                            <h3 class="product-title">${p.title}</h3>
-                            <div class="product-price">${p.price}</div>
-                            <div class="product-loc">📍 ${p.location}</div>
-                            <div class="card-actions">
-                                <a href="https://wa.me/222${p.phone}?text=${waText}" target="_blank" class="wa-btn">💬 ${t[currentLang].waBtn}</a>
-                                <button class="delete-card-btn" onclick="deleteProduct('${p.id}')">${t[currentLang].deleteBtn}</button>
-                            </div>
+            // If viewing a specific store, show a gorgeous store banner at the top!
+            if (activeStoreFilter) {
+                htmlContent += `
+                    <div class="store-header-banner">
+                        <div class="store-header-info">
+                            <h2>🏪 ${activeStoreFilter}</h2>
+                            <p>صفحة المتجر الرسمية — عرض جميع المنتجات المعروضة من هذا البائع</p>
                         </div>
+                        <button class="btn-secondary" onclick="clearStoreFilter()">← العودة للكل</button>
                     </div>
                 `;
-            });
-            grid.innerHTML = html;
+            }
+
+            if (filtered.length === 0) {
+                htmlContent += `
+                    <div class="empty-state">
+                        <h3>لا توجد منتجات</h3>
+                        <p>${t[currentLang].empty}</p>
+                    </div>
+                `;
+            } else {
+                htmlContent += `<div class="product-grid">`;
+                filtered.forEach(p => {
+                    const waText = encodeURIComponent(`Hello, I want to buy your product: ${p.title} (${p.price}) listed in Souk Local.`);
+                    htmlContent += `
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="${p.image}" alt="${p.title}" class="product-img">
+                                <span class="product-cat-badge">${cats[currentLang][p.category] || p.category}</span>
+                            </div>
+                            <div class="product-body">
+                                <span class="store-tag" onclick="filterByStore('${p.storeName}')">🏪 ${p.storeName || 'متجر عام'}</span>
+                                <h3 class="product-title">${p.title}</h3>
+                                <div class="product-price">${p.price}</div>
+                                <div class="product-loc">📍 ${p.location}</div>
+                                <div class="card-actions">
+                                    <a href="https://wa.me/222${p.phone}?text=${waText}" target="_blank" class="wa-btn">💬 ${t[currentLang].waBtn}</a>
+                                    <button class="delete-card-btn" onclick="deleteProduct('${p.id}')">${t[currentLang].deleteBtn}</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                htmlContent += `</div>`;
+            }
+
+            container.innerHTML = htmlContent;
         }
 
         // Initial render call
