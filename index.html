@@ -1,1020 +1,678 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" class="h-full bg-slate-50">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Souk Local - Nouakchott Marketplace</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Inter & Tajawal for Arabic -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'Tajawal', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              wa: '#25D366',
-              waHover: '#1da851',
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سوق لوكال | Souk Local</title>
+    <style>
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --bg: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --border: #E5E7EB;
+            --danger: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding-bottom: 3rem;
+        }
+
+        header {
+            background: var(--card-bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media(min-width: 768px) {
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
             }
-          }
         }
-      }
-    }
-  </script>
-  <style>
-    /* Custom Scrollbar for Category Tabs */
-    .scrollbar-none::-webkit-scrollbar {
-      display: none;
-    }
-    .scrollbar-none {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    [dir="rtl"] .rtl-flip {
-      transform: scaleX(-1);
-    }
-  </style>
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            font-weight: 800;
+        }
+
+        .lang-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .controls-bar {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        @media(min-width: 768px) {
+            .controls-bar {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: var(--card-bg);
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .search-box {
+            flex: 1;
+        }
+
+        .post-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .post-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Categories */
+        .categories {
+            max-width: 1200px;
+            margin: 0.5rem auto 1rem;
+            padding: 0 1rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .cat-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .cat-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Grid */
+        .product-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 200px;
+            background: var(--bg);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .card-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .card-price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .card-loc {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .whatsapp-btn {
+            margin-top: auto;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .whatsapp-btn:hover {
+            background: #1EBE5D;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-align: left;
+            margin-top: 0.25rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px dashed var(--border);
+        }
+    </style>
 </head>
-<body class="font-sans antialiased text-slate-800 bg-slate-50 flex flex-col min-h-screen">
+<body>
 
-  <!-- TOP HEADER / NAVBAR -->
-  <header class="sticky top-0 z-30 bg-slate-900 text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 gap-3">
-        
-        <!-- Logo -->
-        <div class="flex items-center gap-2 cursor-pointer" onclick="resetView()">
-          <span class="text-2xl">🛍️</span>
-          <div>
-            <h1 class="font-bold text-lg leading-tight tracking-tight text-white" id="brandTitle">Souk Local</h1>
-            <p class="text-[10px] text-emerald-400 font-medium tracking-wide" id="brandSubtitle">NOUAKCHOTT HUB</p>
-          </div>
+    <header>
+        <div class="header-container">
+            <h1 id="brandTitle">🛒 سوق لوكال | Souk Local</h1>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
+                <button class="lang-btn" onclick="setLang('fr')">FR</button>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
         </div>
+    </header>
 
-        <!-- Search Bar (Desktop / Tablet) -->
-        <div class="flex-1 max-w-md hidden md:block">
-          <div class="relative">
-            <span class="absolute inset-y-0 ltr:left-0 rtl:right-0 ltr:pl-3 rtl:pr-3 flex items-center pointer-events-none text-slate-400">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search products..." class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
-          </div>
+    <div class="controls-bar">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="ابحث عن منتج، متجر، أو حي..." oninput="renderProducts()">
         </div>
-
-        <!-- Right Action Controls (Lang & Merchant Button) -->
-        <div class="flex items-center gap-2">
-          
-          <!-- Language Selector Dropdown -->
-          <div class="relative">
-            <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold rounded-xl px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
-              <option value="en">🇺🇸 EN</option>
-              <option value="fr">🇫🇷 FR</option>
-              <option value="ar">🇲🇷 العربية</option>
-            </select>
-          </div>
-
-          <!-- Merchant Dashboard Trigger -->
-          <button onclick="openMerchantModal()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl transition-all shadow-sm active:scale-95">
-            <i class="fa-solid fa-store"></i>
-            <span class="hidden sm:inline" id="merchantBtnText">Merchant Portal</span>
-            <span class="sm:hidden" id="merchantBtnShort">Sell</span>
-          </button>
-        </div>
-
-      </div>
-
-      <!-- Mobile Search Bar -->
-      <div class="pb-3 md:hidden">
-        <div class="relative">
-          <span class="absolute inset-y-0 ltr:left-0 rtl:right-0 ltr:pl-3 rtl:pr-3 flex items-center pointer-events-none text-slate-400">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </span>
-          <input type="text" id="mobileSearchInput" oninput="handleMobileSearch()" placeholder="Search..." class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
-        </div>
-      </div>
+        <button class="post-btn" id="openModalBtn" onclick="toggleModal(true)">+ نشر منتج جديد</button>
     </div>
 
-    <!-- CATEGORY NAVIGATION TABS -->
-    <nav class="bg-slate-800 border-t border-slate-700/50 overflow-x-auto scrollbar-none">
-      <div class="max-w-7xl mx-auto px-4 flex gap-2 py-2.5 whitespace-nowrap" id="categoryContainer">
-        <!-- Dynamic Category Buttons populated by JS -->
-      </div>
-    </nav>
-  </header>
+    <div class="categories" id="categoryContainer">
+        <!-- Rendered via JS -->
+    </div>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <main class="product-grid" id="productGrid">
+        <!-- Rendered via JS -->
+    </main>
 
-    <!-- Active Vendor Banner (Shown when viewing a single vendor's shop) -->
-    <div id="vendorHeader" class="hidden mb-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="flex items-start gap-4">
-          <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
-            🏪
-          </div>
-          <div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 class="text-xl font-bold text-slate-900" id="vendorTitle">Shop Name</h2>
-              <span class="bg-emerald-100 text-emerald-800 text-xs font-medium px-2.5 py-0.5 rounded-full" id="vendorLocationBadge">📍 Location</span>
+    <!-- Post Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">نشر منتج جديد</h3>
+                <button class="close-btn" onclick="toggleModal(false)">&times;</button>
             </div>
-            <p class="text-sm text-slate-600 mt-1" id="vendorBio">Shop description here...</p>
-            <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-user text-slate-400 ltr:mr-1 rtl:ml-1"></i> <span id="vendorOwnerLabel">Owner</span>: <span id="vendorOwnerName" class="font-medium text-slate-700"></span></p>
-          </div>
+            <form id="productForm" onsubmit="handlePostProduct(event)">
+                <div class="form-group">
+                    <label id="lblTitle">اسم المنتج</label>
+                    <input type="text" id="prodTitle" required placeholder="مثال: هاتف ذكي، حذاء رياضي...">
+                </div>
+                <div class="form-group">
+                    <label id="lblPrice">السعر (أوقية قديمة/جديدة)</label>
+                    <input type="text" id="prodPrice" required placeholder="مثال: 5000 MRU أو 500 أوقية">
+                </div>
+                <div class="form-group">
+                    <label id="lblCat">التصنيف</label>
+                    <select id="prodCategory" required>
+                        <option value="electronics">إلكترونيات | Électronique</option>
+                        <option value="fashion">أزياء وملابس | Mode</option>
+                        <option value="home">منزل وديكور | Maison</option>
+                        <option value="food">مواد غذائية | Alimentation</option>
+                        <option value="services">خدمات | Services</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="lblLoc">المنطقة / الحي (مثال: تفرغ زينه، الكصر...)</label>
+                    <input type="text" id="prodLocation" required placeholder="تفرغ زينه، نواكشوط">
+                </div>
+                <div class="form-group">
+                    <label id="lblPhone">رقم الهاتف (واتساب - يبدأ ب 2 أو 3 أو 4)</label>
+                    <input type="text" id="prodPhone" required placeholder="مثال: 22123456">
+                </div>
+                <div class="form-group">
+                    <label id="lblPin">رمز الحذف السري (4 أرقام لحذف منتجك لاحقاً)</label>
+                    <input type="password" id="prodPin" maxlength="4" required placeholder="1234">
+                </div>
+                <div class="form-group">
+                    <label id="lblImage">صورة المنتج (من هاتفك)</label>
+                    <input type="file" id="prodImage" accept="image/*" required onchange="handleImageUpload(event)">
+                </div>
+                <button type="submit" class="post-btn" style="width: 100%;" id="lblSubmit">نشر المنتج الآن</button>
+            </form>
         </div>
-        <div class="flex items-center gap-2 w-full md:w-auto">
-          <a id="vendorDirectWa" href="#" target="_blank" class="flex-1 md:flex-initial flex items-center justify-center gap-2 bg-[#25D366] hover:bg-emerald-600 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-sm">
-            <i class="fa-brands fa-whatsapp text-lg"></i> <span id="chatVendorBtn">Chat with Vendor</span>
-          </a>
-          <button onclick="resetView()" class="px-3.5 py-2.5 border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-medium transition-all flex items-center gap-1">
-            <i class="fa-solid fa-xmark"></i> <span id="backBtn">Back</span>
-          </button>
-        </div>
-      </div>
     </div>
 
-    <!-- Section Title & Dynamic Count -->
-    <div class="flex items-center justify-between mb-5">
-      <div>
-        <h2 id="sectionHeading" class="text-xl font-bold text-slate-900">All Products</h2>
-        <p class="text-xs text-slate-500 mt-0.5" id="itemCountLabel">Showing products in Nouakchott</p>
-      </div>
-      <div id="clearFilterBtn" class="hidden">
-        <button onclick="resetCategoryFilter()" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold flex items-center gap-1">
-          <i class="fa-solid fa-rotate-left"></i> <span id="resetFilterText">Reset Filter</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- PRODUCT GRID CONTAINER -->
-    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
-      <!-- Cards rendered dynamically by JS -->
-    </div>
-
-    <!-- Empty State Message -->
-    <div id="emptyState" class="hidden text-center py-16 px-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-      <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-        <i class="fa-solid fa-box-open"></i>
-      </div>
-      <h3 class="text-lg font-bold text-slate-800" id="emptyTitle">No products found</h3>
-      <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto" id="emptyDesc">Try adjusting your category selection or search query to find local items in Nouakchott.</p>
-      <button onclick="resetView()" class="mt-4 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition-all" id="emptyBtn">
-        Browse All Listings
-      </button>
-    </div>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 text-xs py-8 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <div class="flex items-center justify-center gap-2 text-white text-base font-bold mb-2">
-        <span>🛍️ Souk Local</span>
-      </div>
-      <p class="text-slate-400 mb-4 max-w-md mx-auto" id="footerDesc">Empowering local shopkeepers, artisans, and small business owners in Nouakchott with simple, low-friction digital storefronts.</p>
-      <p class="text-slate-500" id="footerRights">© 2026 Souk Local Mauritania. Connecting buyers directly via WhatsApp.</p>
-    </div>
-  </footer>
-
-
-  <!-- MODAL: MERCHANT PORTAL / PROFILE & POSTING -->
-  <div id="merchantModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      
-      <!-- Modal Header -->
-      <div class="bg-slate-900 text-white p-4 sm:p-5 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
-            <i class="fa-solid fa-store text-lg"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-base leading-tight" id="modalTitle">Merchant Portal</h3>
-            <p class="text-xs text-slate-400" id="modalSubtitle">Manage your shop profile & add new items</p>
-          </div>
-        </div>
-        <button onclick="closeMerchantModal()" class="text-slate-400 hover:text-white text-lg p-1 rounded-lg transition-all">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- Tab Buttons for Modal -->
-      <div class="flex border-b border-slate-200 bg-slate-50 text-sm font-medium">
-        <button id="tabProfileBtn" onclick="switchModalTab('profile')" class="flex-1 py-3 px-4 text-center border-b-2 border-emerald-600 text-emerald-700 font-semibold bg-white transition-all flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-address-card"></i> <span id="tabProfileLabel">My Shop Profile</span>
-        </button>
-        <button id="tabPostBtn" onclick="switchModalTab('post')" class="flex-1 py-3 px-4 text-center text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-all flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-plus-circle"></i> <span id="tabPostLabel">Post New Item</span>
-        </button>
-      </div>
-
-      <!-- Modal Body (Scrollable) -->
-      <div class="p-5 overflow-y-auto flex-1 space-y-4">
-        
-        <!-- TAB 1: SHOP PROFILE FORM -->
-        <form id="profileForm" onsubmit="saveShopProfile(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblShopName">Shop / Business Name *</label>
-            <input type="text" id="profShopName" required placeholder="e.g. Nouakchott Electronics" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblOwnerName">Owner Name *</label>
-              <input type="text" id="profOwnerName" required placeholder="e.g. Mohamed Ahmed" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblDistrict">Neighborhood / District *</label>
-              <select id="profLocation" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
-                <option value="Tevragh Zeina">Tevragh Zeina</option>
-                <option value="Ksar">Ksar</option>
-                <option value="Sebkha">Sebkha</option>
-                <option value="Arafat">Arafat</option>
-                <option value="El Mina">El Mina</option>
-                <option value="Dar Naim">Dar Naim</option>
-                <option value="Teyarett">Teyarett</option>
-                <option value="Toujouonine">Toujouonine</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblWaPhone">WhatsApp Phone Number *</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 ltr:left-0 rtl:right-0 ltr:pl-3.5 rtl:pr-3.5 flex items-center text-xs font-medium text-slate-500 pointer-events-none">+222</span>
-              <input type="tel" id="profWaPhone" required placeholder="22000000" pattern="[0-9]{8}" class="w-full ltr:pl-14 rtl:pr-14 ltr:pr-3.5 rtl:pl-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-            </div>
-            <p class="text-[11px] text-slate-400 mt-1" id="phoneHelpText">Enter 8 digits without country code. Customers will message this number directly.</p>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblShopBio">Shop Bio / Description</label>
-            <textarea id="profBio" rows="2" placeholder="Tell customers what your shop specializes in..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
-          </div>
-
-          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-all shadow-sm" id="btnSaveProfile">
-            Save Shop Profile
-          </button>
-        </form>
-
-        <!-- TAB 2: POST ITEM FORM -->
-        <form id="postForm" onsubmit="createNewProduct(event)" class="space-y-4 hidden">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblItemTitle">Product Title *</label>
-            <input type="text" id="itemTitle" required placeholder="e.g. Leather Handbag, Samsung Galaxy A14" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblItemPrice">Price (MRU) *</label>
-              <input type="number" id="itemPrice" required placeholder="e.g. 1200" min="1" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblItemCat">Category *</label>
-              <select id="itemCategory" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
-                <option value="electronics">Electronics</option>
-                <option value="fashion">Fashion & Craft</option>
-                <option value="services">Services</option>
-                <option value="food">Food & Groceries</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- DIRECT PHOTO UPLOAD FROM PHONE/COMPUTER -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblItemImg">Product Photo (Optional)</label>
-            
-            <div class="flex items-center gap-3">
-              <label class="flex-1 flex items-center justify-center gap-2 border-2 border-dashed border-slate-300 hover:border-emerald-500 p-3 rounded-xl cursor-pointer bg-slate-50 hover:bg-emerald-50/50 transition-all text-slate-600">
-                <i class="fa-solid fa-camera text-slate-500 text-lg"></i>
-                <span class="text-xs font-semibold" id="lblUploadPhoto">Upload Photo from Phone</span>
-                <input type="file" id="itemImageFile" accept="image/*" onchange="handleImageSelection(event)" class="hidden">
-              </label>
-
-              <!-- Image Preview Box -->
-              <div id="imagePreviewContainer" class="relative w-14 h-14 rounded-xl border border-slate-200 overflow-hidden bg-slate-100 hidden shrink-0">
-                <img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">
-                <button type="button" onclick="removeSelectedImage()" class="absolute top-0.5 right-0.5 bg-slate-900/80 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px] hover:bg-red-600 transition-colors">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Optional Image URL Fallback input -->
-            <input type="url" id="itemImageUrl" placeholder="Or paste image URL (https://...)" class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs mt-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-600">
-            <p class="text-[11px] text-slate-400 mt-1" id="imgHelpText">Select a photo from your camera/gallery or paste a link. Leave empty for category photo.</p>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1" id="lblItemDesc">Item Description</label>
-            <textarea id="itemDesc" rows="2" placeholder="Condition, color, size, available stock details..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
-          </div>
-
-          <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-all shadow-sm" id="btnPublishItem">
-            Publish Product Listing
-          </button>
-        </form>
-
-      </div>
-    </div>
-  </div>
-
-
-  <!-- APPLICATION JAVASCRIPT LOGIC -->
-  <script>
-    // --- DICTIONARIES & TRANSLATIONS ---
-    const TRANSLATIONS = {
-      en: {
-        dir: 'ltr',
-        brandTitle: 'Souk Local',
-        brandSubtitle: 'NOUAKCHOTT HUB',
-        searchPlaceholder: 'Search products, items, shops...',
-        merchantBtnText: 'Merchant Portal',
-        merchantBtnShort: 'Sell',
-        allProductsHeading: 'All Products',
-        showingItemsCount: (cnt) => `Showing ${cnt} item${cnt === 1 ? '' : 's'} in Nouakchott`,
-        resetFilter: 'Reset Filter',
-        noProductsTitle: 'No products found',
-        noProductsDesc: 'Try adjusting your category selection or search query to find local items in Nouakchott.',
-        browseAllBtn: 'Browse All Listings',
-        orderWhatsappBtn: 'Order on WhatsApp',
-        ownerLabel: 'Owner',
-        chatVendorBtn: 'Chat with Vendor',
-        backBtn: 'Back',
-        footerDesc: 'Empowering local shopkeepers, artisans, and small business owners in Nouakchott with simple, low-friction digital storefronts.',
-        footerRights: '© 2026 Souk Local Mauritania. Connecting buyers directly via WhatsApp.',
-        modalTitle: 'Merchant Portal',
-        modalSubtitle: 'Manage your shop profile & add new items',
-        tabProfile: 'My Shop Profile',
-        tabPost: 'Post New Item',
-        lblShopName: 'Shop / Business Name *',
-        lblOwnerName: 'Owner Name *',
-        lblDistrict: 'Neighborhood / District *',
-        lblWaPhone: 'WhatsApp Phone Number *',
-        phoneHelpText: 'Enter 8 digits without country code. Customers will message this number directly.',
-        lblShopBio: 'Shop Bio / Description',
-        btnSaveProfile: 'Save Shop Profile',
-        lblItemTitle: 'Product Title *',
-        lblItemPrice: 'Price (MRU) *',
-        lblItemCat: 'Category *',
-        lblItemImg: 'Product Photo (Optional)',
-        lblUploadPhoto: 'Upload Photo from Phone',
-        imgHelpText: 'Select a photo from your camera/gallery or paste a link. Leave empty for category photo.',
-        lblItemDesc: 'Item Description',
-        btnPublishItem: 'Publish Product Listing',
-        categories: {
-          all: 'All Items',
-          electronics: 'Electronics',
-          fashion: 'Fashion & Craft',
-          services: 'Services',
-          food: 'Food & Groceries'
-        },
-        waMsg: (shop, title, price) => `Hi ${shop}! I saw your product "${title}" listed for ${price} MRU on Souk Local. Is it currently available?`
-      },
-      fr: {
-        dir: 'ltr',
-        brandTitle: 'Souk Local',
-        brandSubtitle: 'HUB NOUAKCHOTT',
-        searchPlaceholder: 'Rechercher des produits, boutiques...',
-        merchantBtnText: 'Espace Vendeur',
-        merchantBtnShort: 'Vendre',
-        allProductsHeading: 'Tous les Produits',
-        showingItemsCount: (cnt) => `Affichage de ${cnt} produit${cnt > 1 ? 's' : ''} à Nouakchott`,
-        resetFilter: 'Réinitialiser',
-        noProductsTitle: 'Aucun produit trouvé',
-        noProductsDesc: 'Essayez de modifier vos critères de recherche ou de catégorie pour trouver des articles à Nouakchott.',
-        browseAllBtn: 'Voir tous les articles',
-        orderWhatsappBtn: 'Commander via WhatsApp',
-        ownerLabel: 'Propriétaire',
-        chatVendorBtn: 'Discuter avec le Vendeur',
-        backBtn: 'Retour',
-        footerDesc: 'Soutenir les commerçants, artisans et petites entreprises de Nouakchott avec des vitrines digitales simples.',
-        footerRights: '© 2026 Souk Local Mauritanie. Mise en relation directe via WhatsApp.',
-        modalTitle: 'Espace Vendeur',
-        modalSubtitle: 'Gérez votre boutique et ajoutez vos articles',
-        tabProfile: 'Profil Boutique',
-        tabPost: 'Ajouter un Article',
-        lblShopName: 'Nom de la Boutique *',
-        lblOwnerName: 'Nom du Propriétaire *',
-        lblDistrict: 'Quartier / District *',
-        lblWaPhone: 'Numéro WhatsApp *',
-        phoneHelpText: 'Entrez 8 chiffres sans indicatif. Les clients vous contacteront directement.',
-        lblShopBio: 'Description de la Boutique',
-        btnSaveProfile: 'Enregistrer le Profil',
-        lblItemTitle: 'Titre du Produit *',
-        lblItemPrice: 'Prix (MRU) *',
-        lblItemCat: 'Catégorie *',
-        lblItemImg: 'Photo du Produit (Optionnel)',
-        lblUploadPhoto: 'Téléverser une photo',
-        imgHelpText: 'Prenez une photo ou choisissez dans la galerie. Laissez vide pour une photo auto.',
-        lblItemDesc: 'Description de l\'Article',
-        btnPublishItem: 'Publier l\'Annonce',
-        categories: {
-          all: 'Tous les Articles',
-          electronics: 'Électronique',
-          fashion: 'Mode & Artisanat',
-          services: 'Services',
-          food: 'Alimentation & Épicerie'
-        },
-        waMsg: (shop, title, price) => `Bonjour ${shop} ! J'ai vu votre produit "${title}" au prix de ${price} MRU sur Souk Local. Est-il disponible ?`
-      },
-      ar: {
-        dir: 'rtl',
-        brandTitle: 'السوق المحلي',
-        brandSubtitle: 'مركز نواكشوط',
-        searchPlaceholder: 'البحث عن المنتجات أو المتاجر...',
-        merchantBtnText: 'بوابة التاجر',
-        merchantBtnShort: 'بيع',
-        allProductsHeading: 'جميع المنتجات',
-        showingItemsCount: (cnt) => `عرض ${cnt} منتج في نواكشوط`,
-        resetFilter: 'إعادة ضبط البحث',
-        noProductsTitle: 'لم يتم العثور على منتجات',
-        noProductsDesc: 'حاول تعديل تحديد الفئة أو البحث للعثور على عناصر محلية في نواكشوط.',
-        browseAllBtn: 'تصفح جميع المنتجات',
-        orderWhatsappBtn: 'اطلب عبر واتساب',
-        ownerLabel: 'المالك',
-        chatVendorBtn: 'التحدث مع البائع',
-        backBtn: 'رجوع',
-        footerDesc: 'تمكين أصحاب المتاجر والحرفيين والأعمال الصغيرة في نواكشوط من خلال واجهات رقمية بسيطة.',
-        footerRights: '© 2026 السوق المحلي موريتانيا. التواصل المباشر مع المشترين عبر واتساب.',
-        modalTitle: 'بوابة التاجر',
-        modalSubtitle: 'إدارة ملف متجرك وإضافة منتجات جديدة',
-        tabProfile: 'ملف المتجر',
-        tabPost: 'إضافة منتج جديد',
-        lblShopName: 'اسم المتجر / النشاط التجاري *',
-        lblOwnerName: 'اسم المالك *',
-        lblDistrict: 'الجمارك / الحي *',
-        lblWaPhone: 'رقم الواتساب *',
-        phoneHelpText: 'أدخل 8 أرقام بدون رمز الدولة. سيرسل العملاء رسائل مباشر إلى هذا الرقم.',
-        lblShopBio: 'وصف المتجر',
-        btnSaveProfile: 'حفظ ملف المتجر',
-        lblItemTitle: 'عنوان المنتج *',
-        lblItemPrice: 'السعر (أوقية MRU) *',
-        lblItemCat: 'الفئة *',
-        lblItemImg: 'صورة المنتج (اختياري)',
-        lblUploadPhoto: 'تحميل صورة من الهاتف',
-        imgHelpText: 'التقط صورة من الكاميرا أو اختر صورة. اتركه فارغاً لتوليد صورة تلقائية.',
-        lblItemDesc: 'وصف المنتج',
-        btnPublishItem: 'نشر المنتج',
-        categories: {
-          all: 'جميع العناصر',
-          electronics: 'إلكترونيات',
-          fashion: 'موضة وحرف',
-          services: 'خدمات',
-          food: 'أغذية وبقالة'
-        },
-        waMsg: (shop, title, price) => `مرحباً ${shop}! رأيت منتجك "${title}" بسعر ${price} أوقية على السوق المحلي. هل هو متوفر الآن؟`
-      }
-    };
-
-    // --- CATEGORY CONFIGURATION ---
-    const CATEGORY_KEYS = [
-      { id: 'all', icon: 'fa-layer-group' },
-      { id: 'electronics', icon: 'fa-mobile-screen-button' },
-      { id: 'fashion', icon: 'fa-shirt' },
-      { id: 'services', icon: 'fa-screwdriver-wrench' },
-      { id: 'food', icon: 'fa-utensils' }
-    ];
-
-    // --- CATEGORY DEFAULT FALLBACK IMAGES ---
-    const CATEGORY_PRESET_IMAGES = {
-      electronics: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop',
-      fashion: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop',
-      services: 'https://images.unsplash.com/photo-1558769132-cb1aea458e5e?w=600&auto=format&fit=crop',
-      food: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&auto=format&fit=crop'
-    };
-
-    // --- INITIAL SEED DATA ---
-    const DEFAULT_SHOPS = [
-      {
-        id: 'shop_001',
-        shopName: 'Nouakchott Artisans',
-        ownerName: 'Fatou Mint',
-        location: 'Ksar',
-        phone: '22001122',
-        bio: 'Authentic Mauritanian hand-crafted leather, rugs, and traditional souvenirs.'
-      },
-      {
-        id: 'shop_002',
-        shopName: 'Tevragh Tech Hub',
-        ownerName: 'Mohamed Lemine',
-        location: 'Tevragh Zeina',
-        phone: '36112233',
-        bio: 'Quality mobile phones, computer accessories, and fast hardware repair.'
-      }
-    ];
-
-    const DEFAULT_PRODUCTS = [
-      {
-        id: 'prod_101',
-        shopId: 'shop_001',
-        title: 'Traditional Leather Bag',
-        category: 'fashion',
-        price: '1200',
-        image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop',
-        desc: 'Handmade by local leather artisans in Ksar. 100% genuine quality.'
-      },
-      {
-        id: 'prod_102',
-        shopId: 'shop_002',
-        title: 'Wireless Bluetooth Earbuds',
-        category: 'electronics',
-        price: '750',
-        image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop',
-        desc: 'Noise cancelling earbuds with crisp sound and 12h battery backup.'
-      },
-      {
-        id: 'prod_103',
-        shopId: 'shop_001',
-        title: 'Silver Tuareg Craft Ring',
-        category: 'fashion',
-        price: '1800',
-        image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&auto=format&fit=crop',
-        desc: 'Solid traditional silver ring with ornate engravings.'
-      },
-      {
-        id: 'prod_104',
-        shopId: 'shop_002',
-        title: 'Fast Charger 65W Type-C',
-        category: 'electronics',
-        price: '400',
-        image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop',
-        desc: 'Ultra fast dual-port charger compatible with laptops and phones.'
-      },
-      {
-        id: 'prod_105',
-        shopId: 'shop_001',
-        title: 'Custom Tailoring Service',
-        category: 'services',
-        price: '2500',
-        image: 'https://images.unsplash.com/photo-1558769132-cb1aea458e5e?w=600&auto=format&fit=crop',
-        desc: 'Custom sewing for Boubou and traditional dresses. Quick turnaround.'
-      },
-      {
-        id: 'prod_106',
-        shopId: 'shop_002',
-        title: 'Fresh Mauritanian Dates (1kg)',
-        category: 'food',
-        price: '350',
-        image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&auto=format&fit=crop',
-        desc: 'Premium organic dates sourced directly from Atar oases.'
-      }
-    ];
-
-    // --- APPLICATION STATE ---
-    let currentLang = 'en';
-    let shops = [];
-    let products = [];
-    let activeCategory = 'all';
-    let searchQuery = '';
-    let activeVendorId = null;
-    let currentShop = null;
-    let uploadedImageBase64 = ''; // Holds direct photo upload string
-
-    // --- INITIALIZATION ---
-    window.addEventListener('DOMContentLoaded', () => {
-      loadLocalStorageData();
-      applyLanguageUI();
-      renderCategoryTabs();
-      renderProducts();
-      updateMerchantButtonText();
-    });
-
-    // --- LOCAL STORAGE HELPERS ---
-    function loadLocalStorageData() {
-      const storedLang = localStorage.getItem('souk_lang');
-      if (storedLang && TRANSLATIONS[storedLang]) {
-        currentLang = storedLang;
-        document.getElementById('langSelector').value = storedLang;
-      }
-
-      const storedShops = localStorage.getItem('souk_shops');
-      const storedProds = localStorage.getItem('souk_products');
-      const storedCurrentShop = localStorage.getItem('souk_current_shop');
-
-      shops = storedShops ? JSON.parse(storedShops) : DEFAULT_SHOPS;
-      products = storedProds ? JSON.parse(storedProds) : DEFAULT_PRODUCTS;
-      
-      if (storedCurrentShop) {
-        currentShop = JSON.parse(storedCurrentShop);
-      } else {
-        currentShop = shops[0];
-      }
-    }
-
-    function saveData() {
-      localStorage.setItem('souk_shops', JSON.stringify(shops));
-      localStorage.setItem('souk_products', JSON.stringify(products));
-      if (currentShop) {
-        localStorage.setItem('souk_current_shop', JSON.stringify(currentShop));
-      }
-    }
-
-    // --- LANGUAGE SWITCHING LOGIC ---
-    function changeLanguage(lang) {
-      if (!TRANSLATIONS[lang]) return;
-      currentLang = lang;
-      localStorage.setItem('souk_lang', lang);
-      applyLanguageUI();
-      renderCategoryTabs();
-      renderProducts();
-    }
-
-    function applyLanguageUI() {
-      const t = TRANSLATIONS[currentLang];
-      
-      // Update Text Direction
-      document.documentElement.dir = t.dir;
-      document.documentElement.lang = currentLang;
-
-      // Dynamic Static Text Elements
-      document.getElementById('brandTitle').innerText = t.brandTitle;
-      document.getElementById('brandSubtitle').innerText = t.brandSubtitle;
-      document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-      document.getElementById('mobileSearchInput').placeholder = t.searchPlaceholder;
-      document.getElementById('merchantBtnShort').innerText = t.merchantBtnShort;
-
-      document.getElementById('resetFilterText').innerText = t.resetFilter;
-      document.getElementById('emptyTitle').innerText = t.noProductsTitle;
-      document.getElementById('emptyDesc').innerText = t.noProductsDesc;
-      document.getElementById('emptyBtn').innerText = t.browseAllBtn;
-      document.getElementById('vendorOwnerLabel').innerText = t.ownerLabel;
-      document.getElementById('chatVendorBtn').innerText = t.chatVendorBtn;
-      document.getElementById('backBtn').innerText = t.backBtn;
-
-      document.getElementById('footerDesc').innerText = t.footerDesc;
-      document.getElementById('footerRights').innerText = t.footerRights;
-
-      document.getElementById('modalTitle').innerText = t.modalTitle;
-      document.getElementById('modalSubtitle').innerText = t.modalSubtitle;
-      document.getElementById('tabProfileLabel').innerText = t.tabProfile;
-      document.getElementById('tabPostLabel').innerText = t.tabPost;
-
-      document.getElementById('lblShopName').innerText = t.lblShopName;
-      document.getElementById('lblOwnerName').innerText = t.lblOwnerName;
-      document.getElementById('lblDistrict').innerText = t.lblDistrict;
-      document.getElementById('lblWaPhone').innerText = t.lblWaPhone;
-      document.getElementById('phoneHelpText').innerText = t.phoneHelpText;
-      document.getElementById('lblShopBio').innerText = t.lblShopBio;
-      document.getElementById('btnSaveProfile').innerText = t.btnSaveProfile;
-
-      document.getElementById('lblItemTitle').innerText = t.lblItemTitle;
-      document.getElementById('lblItemPrice').innerText = t.lblItemPrice;
-      document.getElementById('lblItemCat').innerText = t.lblItemCat;
-      document.getElementById('lblItemImg').innerText = t.lblItemImg;
-      document.getElementById('lblUploadPhoto').innerText = t.lblUploadPhoto;
-      document.getElementById('imgHelpText').innerText = t.imgHelpText;
-      document.getElementById('lblItemDesc').innerText = t.lblItemDesc;
-      document.getElementById('btnPublishItem').innerText = t.btnPublishItem;
-
-      // Update Category Dropdown Options in Modal
-      const itemCatSelect = document.getElementById('itemCategory');
-      itemCatSelect.options[0].text = t.categories.electronics;
-      itemCatSelect.options[1].text = t.categories.fashion;
-      itemCatSelect.options[2].text = t.categories.services;
-      itemCatSelect.options[3].text = t.categories.food;
-
-      updateMerchantButtonText();
-    }
-
-    // --- IMAGE UPLOAD LOGIC ---
-    function handleImageSelection(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        uploadedImageBase64 = e.target.result;
-        
-        // Show live preview
-        const previewImg = document.getElementById('imagePreview');
-        const previewContainer = document.getElementById('imagePreviewContainer');
-        previewImg.src = uploadedImageBase64;
-        previewContainer.classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function removeSelectedImage() {
-      uploadedImageBase64 = '';
-      document.getElementById('itemImageFile').value = '';
-      document.getElementById('imagePreviewContainer').classList.add('hidden');
-      document.getElementById('imagePreview').src = '';
-    }
-
-    // --- RENDER CATEGORY TABS ---
-    function renderCategoryTabs() {
-      const container = document.getElementById('categoryContainer');
-      const t = TRANSLATIONS[currentLang];
-
-      container.innerHTML = CATEGORY_KEYS.map(cat => {
-        const isActive = activeCategory === cat.id;
-        const categoryLabel = t.categories[cat.id] || cat.id;
-        return `
-          <button onclick="setCategory('${cat.id}')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
-            isActive 
-              ? 'bg-emerald-500 text-white shadow-sm ring-1 ring-emerald-400' 
-              : 'bg-slate-700/60 text-slate-300 hover:bg-slate-700 hover:text-white'
-          }">
-            <i class="fa-solid ${cat.icon}"></i>
-            <span>${categoryLabel}</span>
-          </button>
-        `;
-      }).join('');
-    }
-
-    // --- CATEGORY & SEARCH FILTERING ---
-    function setCategory(catId) {
-      activeCategory = catId;
-      renderCategoryTabs();
-      renderProducts();
-    }
-
-    function resetCategoryFilter() {
-      activeCategory = 'all';
-      searchQuery = '';
-      document.getElementById('searchInput').value = '';
-      document.getElementById('mobileSearchInput').value = '';
-      renderCategoryTabs();
-      renderProducts();
-    }
-
-    function handleSearch() {
-      searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
-      document.getElementById('mobileSearchInput').value = searchQuery;
-      renderProducts();
-    }
-
-    function handleMobileSearch() {
-      searchQuery = document.getElementById('mobileSearchInput').value.trim().toLowerCase();
-      document.getElementById('searchInput').value = searchQuery;
-      renderProducts();
-    }
-
-    function filterByVendor(shopId) {
-      activeVendorId = shopId;
-      renderProducts();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function resetView() {
-      activeVendorId = null;
-      activeCategory = 'all';
-      searchQuery = '';
-      document.getElementById('searchInput').value = '';
-      document.getElementById('mobileSearchInput').value = '';
-      renderCategoryTabs();
-      renderProducts();
-    }
-
-    // --- RENDER PRODUCTS ---
-    function renderProducts() {
-      const t = TRANSLATIONS[currentLang];
-      const grid = document.getElementById('productGrid');
-      const emptyState = document.getElementById('emptyState');
-      const vendorHeader = document.getElementById('vendorHeader');
-      const sectionHeading = document.getElementById('sectionHeading');
-      const itemCountLabel = document.getElementById('itemCountLabel');
-      const clearFilterBtn = document.getElementById('clearFilterBtn');
-
-      let filtered = products.filter(p => {
-        const matchCategory = activeCategory === 'all' || p.category === activeCategory;
-        const shop = shops.find(s => s.id === p.shopId) || {};
-        const matchSearch = !searchQuery || 
-          p.title.toLowerCase().includes(searchQuery) ||
-          (p.desc && p.desc.toLowerCase().includes(searchQuery)) ||
-          (shop.shopName && shop.shopName.toLowerCase().includes(searchQuery)) ||
-          (shop.location && shop.location.toLowerCase().includes(searchQuery));
-
-        const matchVendor = !activeVendorId || p.shopId === activeVendorId;
-
-        return matchCategory && matchSearch && matchVendor;
-      });
-
-      // Update Section Header & Vendor Banner
-      if (activeVendorId) {
-        const currentVendor = shops.find(s => s.id === activeVendorId);
-        if (currentVendor) {
-          vendorHeader.classList.remove('hidden');
-          document.getElementById('vendorTitle').innerText = currentVendor.shopName;
-          document.getElementById('vendorOwnerName').innerText = currentVendor.ownerName;
-          document.getElementById('vendorLocationBadge').innerText = `📍 ${currentVendor.location}`;
-          document.getElementById('vendorBio').innerText = currentVendor.bio || 'Local vendor operating in Nouakchott.';
-          
-          const defaultWaText = encodeURIComponent(`Hi ${currentVendor.shopName}! I saw your shop on Souk Local.`);
-          document.getElementById('vendorDirectWa').href = `https://wa.me/222${currentVendor.phone}?text=${defaultWaText}`;
-          
-          sectionHeading.innerText = currentVendor.shopName;
-        }
-      } else {
-        vendorHeader.classList.add('hidden');
-        if (activeCategory !== 'all') {
-          sectionHeading.innerText = t.categories[activeCategory] || t.allProductsHeading;
-        } else if (searchQuery) {
-          sectionHeading.innerText = `Search: "${searchQuery}"`;
-        } else {
-          sectionHeading.innerText = t.allProductsHeading;
-        }
-      }
-
-      itemCountLabel.innerText = t.showingItemsCount(filtered.length);
-      
-      if (activeCategory !== 'all' || searchQuery || activeVendorId) {
-        clearFilterBtn.classList.remove('hidden');
-      } else {
-        clearFilterBtn.classList.add('hidden');
-      }
-
-      if (filtered.length === 0) {
-        grid.innerHTML = '';
-        emptyState.classList.remove('hidden');
-        return;
-      } else {
-        emptyState.classList.add('hidden');
-      }
-
-      // Render Grid Cards
-      grid.innerHTML = filtered.map(item => {
-        const shop = shops.find(s => s.id === item.shopId) || {
-          shopName: 'Local Store',
-          location: 'Nouakchott',
-          phone: '22000000'
+    <script>
+        // Translations
+        const t = {
+            ar: {
+                brand: "🛒 سوق لوكال | Souk Local",
+                search: "ابحث عن منتج، متجر، أو حي...",
+                postBtn: "+ نشر منتج جديد",
+                modalTitle: "نشر منتج جديد",
+                lblTitle: "اسم المنتج",
+                lblPrice: "السعر",
+                lblCat: "التصنيف",
+                lblLoc: "المنطقة / الحي",
+                lblPhone: "رقم الهاتف (يبدأ ب 2 أو 3 أو 4)",
+                lblPin: "رمز الحذف السري (4 أرقام)",
+                lblImage: "صورة المنتج (إلزامي)",
+                lblSubmit: "نشر المنتج الآن",
+                all: "الكل",
+                waBtn: "اطلب عبر واتساب",
+                empty: "لا توجد منتجات منشورة حتى الآن. كن أول بائع ينشر منتجاً!",
+                deleteBtn: "حذف",
+                phoneError: "رقم الهاتف غير صحيح في موريتانيا! يجب أن يتكون من 8 أرقام ويبدأ بـ 2 أو 3 أو 4.",
+                pinPrompt: "أدخل رمز الحذف المكون من 4 أرقام لحذف هذا المنتج:",
+                wrongPin: "رمز الحذف غير صحيح!"
+            },
+            fr: {
+                brand: "🛒 Souk Local",
+                search: "Rechercher un produit, boutique...",
+                postBtn: "+ Publier un produit",
+                modalTitle: "Publier un article",
+                lblTitle: "Nom du produit",
+                lblPrice: "Prix",
+                lblCat: "Catégorie",
+                lblLoc: "Quartier / Ville",
+                lblPhone: "Téléphone (commence par 2, 3 ou 4)",
+                lblPin: "Code PIN (4 chiffres)",
+                lblImage: "Image du produit (obligatoire)",
+                lblSubmit: "Publier maintenant",
+                all: "Tous",
+                waBtn: "Commander via WhatsApp",
+                empty: "Aucun produit publié. Soyez le premier !",
+                deleteBtn: "Supprimer",
+                phoneError: "Numéro invalide ! Il doit commencer par 2, 3 ou 4 et comporter 8 chiffres.",
+                pinPrompt: "Entrez le code PIN à 4 chiffres pour supprimer :",
+                wrongPin: "Code PIN incorrect !"
+            },
+            en: {
+                brand: "🛒 Souk Local",
+                search: "Search products, shops, neighborhoods...",
+                postBtn: "+ Post Product",
+                modalTitle: "Post New Product",
+                lblTitle: "Product Name",
+                lblPrice: "Price",
+                lblCat: "Category",
+                lblLoc: "Neighborhood / Location",
+                lblPhone: "Phone Number (starts with 2, 3, or 4)",
+                lblPin: "4-Digit Delete PIN",
+                lblImage: "Product Image (Required)",
+                lblSubmit: "Publish Now",
+                all: "All",
+                waBtn: "Order via WhatsApp",
+                empty: "No products posted yet. Be the first merchant!",
+                deleteBtn: "Delete",
+                phoneError: "Invalid Mauritanian number! Must be 8 digits starting with 2, 3, or 4.",
+                pinPrompt: "Enter 4-digit delete PIN:",
+                wrongPin: "Incorrect PIN!"
+            }
         };
 
-        const msgText = t.waMsg(shop.shopName, item.title, item.price);
-        const waUrl = `https://wa.me/222${shop.phone}?text=${encodeURIComponent(msgText)}`;
+        const cats = {
+            ar: { all: "الكل", electronics: "إلكترونيات", fashion: "أزياء", home: "منزل", food: "مواد غذائية", services: "خدمات" },
+            fr: { all: "Tous", electronics: "Électronique", fashion: "Mode", home: "Maison", food: "Alimentation", services: "Services" },
+            en: { all: "All", electronics: "Electronics", fashion: "Fashion", home: "Home", food: "Food", services: "Services" }
+        };
 
-        const displayImg = item.image || CATEGORY_PRESET_IMAGES[item.category] || CATEGORY_PRESET_IMAGES.fashion;
+        let currentLang = 'ar';
+        let activeCategory = 'all';
+        let uploadedImageBase64 = '';
 
-        return `
-          <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        // Initial empty product storage (Clean start)
+        let products = JSON.parse(localStorage.getItem('souk_products') || '[]');
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            // Active button class
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Text translations
+            document.getElementById('brandTitle').innerText = t[lang].brand;
+            document.getElementById('searchInput').placeholder = t[lang].search;
+            document.getElementById('openModalBtn').innerText = t[lang].postBtn;
+            document.getElementById('modalTitle').innerText = t[lang].modalTitle;
+            document.getElementById('lblTitle').innerText = t[lang].lblTitle;
+            document.getElementById('lblPrice').innerText = t[lang].lblPrice;
+            document.getElementById('lblCat').innerText = t[lang].lblCat;
+            document.getElementById('lblLoc').innerText = t[lang].lblLoc;
+            document.getElementById('lblPhone').innerText = t[lang].lblPhone;
+            document.getElementById('lblPin').innerText = t[lang].lblPin;
+            document.getElementById('lblImage').innerText = t[lang].lblImage;
+            document.getElementById('lblSubmit').innerText = t[lang].lblSubmit;
+
+            renderCategories();
+            renderProducts();
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            const currentCats = cats[currentLang];
+            let html = `<div class="cat-chip ${activeCategory === 'all' ? 'active' : ''}" onclick="filterCat('all')">${currentCats.all}</div>`;
             
-            <!-- Image & Badge Container -->
-            <div class="relative aspect-square overflow-hidden bg-slate-100">
-              <img src="${displayImg}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='${CATEGORY_PRESET_IMAGES.fashion}'">
-              <div class="absolute top-2 ltr:left-2 rtl:right-2 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                📍 ${shop.location}
-              </div>
-            </div>
+            for (let key in currentCats) {
+                if (key !== 'all') {
+                    html += `<div class="cat-chip ${activeCategory === key ? 'active' : ''}" onclick="filterCat('${key}')">${currentCats[key]}</div>`;
+                }
+            }
+            container.innerHTML = html;
+        }
 
-            <!-- Content Area -->
-            <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between">
-              <div>
-                <!-- Shop Name Link -->
-                <button onclick="filterByVendor('${shop.id}')" class="text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 truncate max-w-full ltr:text-left rtl:text-right block mb-0.5">
-                  ${shop.shopName}
-                </button>
-                
-                <!-- Product Title -->
-                <h3 class="font-bold text-slate-800 text-xs sm:text-sm line-clamp-2 leading-snug">${item.title}</h3>
-                
-                <!-- Price Badge -->
-                <div class="mt-2 text-slate-900 font-extrabold text-sm sm:text-base">
-                  ${Number(item.price).toLocaleString()} <span class="text-xs font-semibold text-emerald-600">MRU</span>
-                </div>
-              </div>
+        function filterCat(cat) {
+            activeCategory = cat;
+            renderCategories();
+            renderProducts();
+        }
 
-              <!-- WhatsApp Action Button -->
-              <a href="${waUrl}" target="_blank" class="mt-3.5 w-full bg-[#25D366] hover:bg-emerald-600 text-white font-semibold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95">
-                <i class="fa-brands fa-whatsapp text-sm"></i> ${t.orderWhatsappBtn}
-              </a>
-            </div>
+        function toggleModal(open) {
+            document.getElementById('postModal').classList.toggle('open', open);
+            if(!open) {
+                document.getElementById('productForm').reset();
+                uploadedImageBase64 = '';
+            }
+        }
 
-          </div>
-        `;
-      }).join('');
-    }
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageBase64 = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
 
-    // --- MERCHANT MODAL & PORTAL LOGIC ---
-    function openMerchantModal() {
-      populateProfileFields();
-      document.getElementById('merchantModal').classList.remove('hidden');
-    }
+        function handlePostProduct(e) {
+            e.preventDefault();
 
-    function closeMerchantModal() {
-      document.getElementById('merchantModal').classList.add('hidden');
-    }
+            const title = document.getElementById('prodTitle').value;
+            const price = document.getElementById('prodPrice').value;
+            const category = document.getElementById('prodCategory').value;
+            const location = document.getElementById('prodLocation').value;
+            const phone = document.getElementById('prodPhone').value.trim();
+            const pin = document.getElementById('prodPin').value;
 
-    function switchModalTab(tab) {
-      const tabProfileBtn = document.getElementById('tabProfileBtn');
-      const tabPostBtn = document.getElementById('tabPostBtn');
-      const profileForm = document.getElementById('profileForm');
-      const postForm = document.getElementById('postForm');
+            // Step B Verification 1: Phone check (Mauritania: 8 digits, starts with 2, 3, or 4)
+            const phoneRegex = /^[234]\d{7}$/;
+            if (!phoneRegex.test(phone)) {
+                alert(t[currentLang].phoneError);
+                return;
+            }
 
-      if (tab === 'profile') {
-        tabProfileBtn.className = "flex-1 py-3 px-4 text-center border-b-2 border-emerald-600 text-emerald-700 font-semibold bg-white transition-all flex items-center justify-center gap-1.5";
-        tabPostBtn.className = "flex-1 py-3 px-4 text-center text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-all flex items-center justify-center gap-1.5";
-        profileForm.classList.remove('hidden');
-        postForm.classList.add('hidden');
-      } else {
-        tabPostBtn.className = "flex-1 py-3 px-4 text-center border-b-2 border-emerald-600 text-emerald-700 font-semibold bg-white transition-all flex items-center justify-center gap-1.5";
-        tabProfileBtn.className = "flex-1 py-3 px-4 text-center text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-all flex items-center justify-center gap-1.5";
-        postForm.classList.remove('hidden');
-        profileForm.classList.add('hidden');
-      }
-    }
+            // Step B Verification 2: Mandatory Photo Check
+            if (!uploadedImageBase64) {
+                alert(t[currentLang].lblImage + "!");
+                return;
+            }
 
-    function populateProfileFields() {
-      if (currentShop) {
-        document.getElementById('profShopName').value = currentShop.shopName || '';
-        document.getElementById('profOwnerName').value = currentShop.ownerName || '';
-        document.getElementById('profLocation').value = currentShop.location || 'Tevragh Zeina';
-        document.getElementById('profWaPhone').value = currentShop.phone || '';
-        document.getElementById('profBio').value = currentShop.bio || '';
-      }
-    }
+            const newProduct = {
+                id: Date.now(),
+                title,
+                price,
+                category,
+                location,
+                phone,
+                pin,
+                image: uploadedImageBase64
+            };
 
-    function updateMerchantButtonText() {
-      const btnText = document.getElementById('merchantBtnText');
-      const t = TRANSLATIONS[currentLang];
-      if (currentShop && currentShop.shopName) {
-        btnText.innerText = `${t.merchantBtnText} (${currentShop.shopName})`;
-      } else {
-        btnText.innerText = t.merchantBtnText;
-      }
-    }
+            products.unshift(newProduct);
+            localStorage.setItem('souk_products', JSON.stringify(products));
 
-    // --- SAVE SHOP PROFILE ---
-    function saveShopProfile(event) {
-      event.preventDefault();
+            toggleModal(false);
+            renderProducts();
+        }
 
-      const shopName = document.getElementById('profShopName').value.trim();
-      const ownerName = document.getElementById('profOwnerName').value.trim();
-      const location = document.getElementById('profLocation').value;
-      const phone = document.getElementById('profWaPhone').value.trim();
-      const bio = document.getElementById('profBio').value.trim();
+        function deleteProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
 
-      if (!currentShop) {
-        currentShop = { id: 'shop_' + Date.now() };
-      }
+            const enteredPin = prompt(t[currentLang].pinPrompt);
+            if (enteredPin === product.pin) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('souk_products', JSON.stringify(products));
+                renderProducts();
+            } else {
+                alert(t[currentLang].wrongPin);
+            }
+        }
 
-      currentShop.shopName = shopName;
-      currentShop.ownerName = ownerName;
-      currentShop.location = location;
-      currentShop.phone = phone;
-      currentShop.bio = bio;
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
 
-      const existingIdx = shops.findIndex(s => s.id === currentShop.id);
-      if (existingIdx >= 0) {
-        shops[existingIdx] = currentShop;
-      } else {
-        shops.push(currentShop);
-      }
+            const filtered = products.filter(p => {
+                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
+                                      p.location.toLowerCase().includes(searchVal) ||
+                                      p.price.toLowerCase().includes(searchVal);
+                return matchesCat && matchesSearch;
+            });
 
-      saveData();
-      updateMerchantButtonText();
-      renderProducts();
-      switchModalTab('post');
-    }
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="empty-state">${t[currentLang].empty}</div>`;
+                return;
+            }
 
-    // --- CREATE NEW PRODUCT ---
-    function createNewProduct(event) {
-      event.preventDefault();
+            let html = '';
+            filtered.forEach(p => {
+                const waMessage = encodeURIComponent(`السلام عليكم، أريد الاستفسار عن منتجكم: ${p.title} (${p.price}) المعروض في ${p.location}`);
+                const waLink = `https://wa.me/222${p.phone}?text=${waMessage}`;
 
-      if (!currentShop || !currentShop.id) {
-        switchModalTab('profile');
-        return;
-      }
+                html += `
+                    <div class="card">
+                        <div class="card-img-container">
+                            <img src="${p.image}" class="card-img" alt="${p.title}">
+                        </div>
+                        <div class="card-body">
+                            <span class="card-category">${cats[currentLang][p.category] || p.category}</span>
+                            <h3 class="card-title">${p.title}</h3>
+                            <div class="card-price">${p.price}</div>
+                            <div class="card-loc">📍 ${p.location}</div>
+                            <button class="delete-btn" onclick="deleteProduct(${p.id})">🗑️ ${t[currentLang].deleteBtn}</button>
+                            <a href="${waLink}" target="_blank" class="whatsapp-btn">
+                                💬 ${t[currentLang].waBtn}
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
 
-      const title = document.getElementById('itemTitle').value.trim();
-      const price = document.getElementById('itemPrice').value.trim();
-      const category = document.getElementById('itemCategory').value;
-      const imageUrlInput = document.getElementById('itemImageUrl').value.trim();
-      const desc = document.getElementById('itemDesc').value.trim();
+            grid.innerHTML = html;
+        }
 
-      // Priority: Direct File Upload > Image URL Input > Category Preset
-      const finalImage = uploadedImageBase64 || imageUrlInput || CATEGORY_PRESET_IMAGES[category] || CATEGORY_PRESET_IMAGES.fashion;
-
-      const newProd = {
-        id: 'prod_' + Date.now(),
-        shopId: currentShop.id,
-        title: title,
-        category: category,
-        price: price,
-        image: finalImage,
-        desc: desc
-      };
-
-      products.unshift(newProd);
-      saveData();
-      renderProducts();
-
-      // Reset form & upload states
-      document.getElementById('postForm').reset();
-      removeSelectedImage();
-
-      closeMerchantModal();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
+        // Initial Load
+        renderCategories();
+        renderProducts();
+    </script>
 </body>
 </html>
