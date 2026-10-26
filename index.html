@@ -4,35 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سوق لوكال | Souk Local</title>
+    
+    <!-- Firebase App (Core) and Firestore SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <style>
         :root {
-            --primary: #10B981;
-            --primary-dark: #059669;
-            --bg: #F3F4F6;
-            --card-bg: #FFFFFF;
-            --text: #1F2937;
-            --text-light: #6B7280;
-            --border: #E5E7EB;
-            --danger: #EF4444;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --whatsapp: #25d366;
+            --danger: #ef4444;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.5;
             padding-bottom: 3rem;
         }
 
         header {
             background: var(--card-bg);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -41,30 +47,14 @@
         .header-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        @media(min-width: 768px) {
-            .header-container {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         h1 {
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
         }
 
         .lang-switcher {
@@ -73,13 +63,12 @@
         }
 
         .lang-btn {
-            background: var(--bg);
+            background: none;
             border: 1px solid var(--border);
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
             cursor: pointer;
             font-size: 0.875rem;
-            font-weight: 600;
         }
 
         .lang-btn.active {
@@ -90,37 +79,26 @@
 
         .controls-bar {
             max-width: 1200px;
-            margin: 1rem auto;
+            margin: 1.5rem auto;
             padding: 0 1rem;
             display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        @media(min-width: 768px) {
-            .controls-bar {
-                flex-direction: row;
-                justify-content: space-between;
-            }
+        .search-box {
+            flex: 1;
+            min-width: 250px;
         }
 
-        input[type="text"], select {
+        .search-box input {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border);
             border-radius: 0.5rem;
             font-size: 1rem;
             outline: none;
             background: var(--card-bg);
-        }
-
-        input[type="text"]:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        .search-box {
-            flex: 1;
         }
 
         .post-btn {
@@ -129,20 +107,18 @@
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            text-align: center;
         }
 
         .post-btn:hover {
             background: var(--primary-dark);
         }
 
-        /* Categories */
         .categories {
             max-width: 1200px;
-            margin: 0.5rem auto 1rem;
+            margin: 0 auto 1.5rem auto;
             padding: 0 1rem;
             display: flex;
             gap: 0.5rem;
@@ -155,11 +131,10 @@
             border: 1px solid var(--border);
             padding: 0.5rem 1rem;
             border-radius: 2rem;
-            white-space: nowrap;
             cursor: pointer;
+            white-space: nowrap;
             font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-light);
+            font-weight: 500;
         }
 
         .cat-chip.active {
@@ -168,7 +143,6 @@
             border-color: var(--primary);
         }
 
-        /* Grid */
         .product-grid {
             max-width: 1200px;
             margin: 0 auto;
@@ -178,34 +152,24 @@
             gap: 1.5rem;
         }
 
-        .card {
+        .product-card {
             background: var(--card-bg);
+            border: 1px solid var(--border);
             border-radius: 0.75rem;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .card-img-container {
+        .product-img {
             width: 100%;
             height: 200px;
-            background: var(--bg);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
+            background: #e2e8f0;
         }
 
-        .card-body {
+        .product-body {
             padding: 1rem;
             display: flex;
             flex-direction: column;
@@ -213,60 +177,57 @@
             flex: 1;
         }
 
-        .card-category {
+        .product-cat {
             font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--primary-dark);
+        }
+
+        .product-title {
+            font-size: 1rem;
             font-weight: 700;
         }
 
-        .card-title {
+        .product-price {
             font-size: 1.125rem;
-            font-weight: 700;
-        }
-
-        .card-price {
-            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--primary-dark);
+            color: #059669;
         }
 
-        .card-loc {
+        .product-loc {
             font-size: 0.875rem;
             color: var(--text-light);
         }
 
-        .whatsapp-btn {
+        .card-actions {
             margin-top: auto;
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 0.5rem;
-            transition: background 0.2s;
+            padding-top: 1rem;
         }
 
-        .whatsapp-btn:hover {
-            background: #1EBE5D;
+        .wa-btn {
+            flex: 1;
+            background: var(--whatsapp);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
         }
 
-        .delete-btn {
-            background: transparent;
-            border: none;
+        .delete-card-btn {
+            background: #fee2e2;
             color: var(--danger);
-            font-size: 0.75rem;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
             cursor: pointer;
-            text-align: left;
-            margin-top: 0.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
         }
 
         /* Modal */
@@ -332,11 +293,6 @@
             border-radius: 0.5rem;
             font-size: 1rem;
             outline: none;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            height: 100px;
         }
 
         .empty-state {
@@ -426,6 +382,20 @@
     </div>
 
     <script>
+        // TODO: Replace with your actual Firebase project configuration credentials
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // Translations
         const t = {
             ar: {
@@ -502,20 +472,27 @@
         let currentLang = 'ar';
         let activeCategory = 'all';
         let uploadedImageBase64 = '';
+        let products = [];
 
-        // Initial empty product storage (Clean start)
-        let products = JSON.parse(localStorage.getItem('souk_products') || '[]');
+        // 🌟 Real-time Firestore Sync (Loads and updates automatically)
+        db.collection('products').onSnapshot((snapshot) => {
+            products = [];
+            snapshot.forEach((doc) => {
+                products.push({ id: doc.id, ...doc.data() });
+            });
+            renderProducts();
+        });
 
         function setLang(lang) {
             currentLang = lang;
             document.documentElement.lang = lang;
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-            // Active button class
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
 
-            // Text translations
             document.getElementById('brandTitle').innerText = t[lang].brand;
             document.getElementById('searchInput').placeholder = t[lang].search;
             document.getElementById('openModalBtn').innerText = t[lang].postBtn;
@@ -571,6 +548,7 @@
             }
         }
 
+        // 🌟 Post product directly to Firestore Cloud Database
         function handlePostProduct(e) {
             e.preventDefault();
 
@@ -581,42 +559,39 @@
             const phone = document.getElementById('prodPhone').value.trim();
             const pin = document.getElementById('prodPin').value;
 
-            // Step B Verification 1: Phone check (Mauritania: 8 digits, starts with 2, 3, or 4)
             const phoneRegex = /^[234]\d{7}$/;
             if (!phoneRegex.test(phone)) {
                 alert(t[currentLang].phoneError);
                 return;
             }
 
-            // Step B Verification 2: Mandatory Photo Check
             if (!uploadedImageBase64) {
                 alert(t[currentLang].lblImage + "!");
                 return;
             }
 
             const newProduct = {
-                id: Date.now(),
                 title,
                 price,
                 category,
                 location,
                 phone,
                 pin,
-                image: uploadedImageBase64
+                image: uploadedImageBase64,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            products.unshift(newProduct);
             db.collection('products').add(newProduct)
                 .then(() => {
                     toggleModal(false);
                 })
                 .catch((error) => {
                     console.error("Error adding product: ", error);
+                    alert("Error posting product. Check console.");
                 });
-
-            renderProducts();
         }
 
+        // 🌟 Delete product straight from Firestore Cloud Database
         function deleteProduct(id) {
             const product = products.find(p => p.id === id);
             if (!product) return;
@@ -640,10 +615,8 @@
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
 
             const filtered = products.filter(p => {
-                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
-                const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
-                                      p.location.toLowerCase().includes(searchVal) ||
-                                      p.price.toLowerCase().includes(searchVal);
+                const matchesCat = (activeCategory === 'all' || p.category === activeCategory);
+                const matchesSearch = (p.title && p.title.toLowerCase().includes(searchVal)) || (p.location && p.location.toLowerCase().includes(searchVal));
                 return matchesCat && matchesSearch;
             });
 
@@ -654,34 +627,28 @@
 
             let html = '';
             filtered.forEach(p => {
-                const waMessage = encodeURIComponent(`السلام عليكم، أريد الاستفسار عن منتجكم: ${p.title} (${p.price}) المعروض في ${p.location}`);
-                const waLink = `https://wa.me/222${p.phone}?text=${waMessage}`;
-
+                const waText = encodeURIComponent(`Hello, I want to buy your product: ${p.title} (${p.price}) listed in Souk Local.`);
                 html += `
-                    <div class="card">
-                        <div class="card-img-container">
-                            <img src="${p.image}" class="card-img" alt="${p.title}">
-                        </div>
-                        <div class="card-body">
-                            <span class="card-category">${cats[currentLang][p.category] || p.category}</span>
-                            <h3 class="card-title">${p.title}</h3>
-                            <div class="card-price">${p.price}</div>
-                            <div class="card-loc">📍 ${p.location}</div>
-                            <button class="delete-btn" onclick="deleteProduct(${p.id})">🗑️ ${t[currentLang].deleteBtn}</button>
-                            <a href="${waLink}" target="_blank" class="whatsapp-btn">
-                                💬 ${t[currentLang].waBtn}
-                            </a>
+                    <div class="product-card">
+                        <img src="${p.image}" alt="${p.title}" class="product-img">
+                        <div class="product-body">
+                            <span class="product-cat">${cats[currentLang][p.category] || p.category}</span>
+                            <h3 class="product-title">${p.title}</h3>
+                            <div class="product-price">${p.price}</div>
+                            <div class="product-loc">📍 ${p.location}</div>
+                            <div class="card-actions">
+                                <a href="https://wa.me/222${p.phone}?text=${waText}" target="_blank" class="wa-btn">💬 ${t[currentLang].waBtn}</a>
+                                <button class="delete-card-btn" onclick="deleteProduct('${p.id}')">${t[currentLang].deleteBtn}</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
-
             grid.innerHTML = html;
         }
 
-        // Initial Load
+        // Initial render call
         renderCategories();
-        renderProducts();
     </script>
 </body>
 </html>
