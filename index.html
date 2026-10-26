@@ -606,9 +606,14 @@
             };
 
             products.unshift(newProduct);
-            localStorage.setItem('souk_products', JSON.stringify(products));
+            db.collection('products').add(newProduct)
+                .then(() => {
+                    toggleModal(false);
+                })
+                .catch((error) => {
+                    console.error("Error adding product: ", error);
+                });
 
-            toggleModal(false);
             renderProducts();
         }
 
@@ -618,9 +623,13 @@
 
             const enteredPin = prompt(t[currentLang].pinPrompt);
             if (enteredPin === product.pin) {
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem('souk_products', JSON.stringify(products));
-                renderProducts();
+                db.collection('products').doc(id).delete()
+                    .then(() => {
+                        console.log("Deleted successfully!");
+                    })
+                    .catch((error) => {
+                        console.error("Error removing product: ", error);
+                    });
             } else {
                 alert(t[currentLang].wrongPin);
             }
